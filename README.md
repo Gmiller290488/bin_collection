@@ -10,15 +10,15 @@ To install the bin_collection you can either:
     
      pip3 show bin_collection
      
-    This will show the path for the site-packages directory where bin_collection was installed.
+ This will show the path for the site-packages directory where bin_collection was installed.
     
      cd <path-to-site-packages>/bin_collection
      
-    From here, to run the program:
+ From here, to run the program:
      
      python bin_collection
      
-    And to run tests:
+ And to run tests:
     
      python test_samples
      
