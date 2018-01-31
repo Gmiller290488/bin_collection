@@ -1,6 +1,7 @@
 import urllib.request
 import time
 from icalendar import Calendar
+from datetime import datetime, timedelta
 
 bin_event_list = []
 unordered_date_list = []
@@ -41,11 +42,11 @@ def count_the_mode_date_occurrences(date_list):
 
 
 def find_all_occurrences_of_input_date(date_input, count):
-    first_position_of_date_input = is_date_on_calendar(date_input)
-    if first_position_of_date_input:
+    index = is_date_on_calendar(date_input)
+    if date_input:
         positions_of_date_input_in_unordered_list = []
         for sublist in ordered_date_list:
-            if sublist[1] == unordered_date_list.index(date_input):
+            if sublist[1] == index:
                 index_of_date_input_in_ordered_list = ordered_date_list.index(sublist)
                 break
         positions_of_date_input_in_unordered_list.append(ordered_date_list[index_of_date_input_in_ordered_list][1])
@@ -66,17 +67,19 @@ def is_date_valid(date):
             print('Invalid date form!  Please use the format mm/dd/YYYY')
 
 
-def is_date_on_calendar(date):
+def is_date_on_calendar(date_input):
     try:
-        return unordered_date_list.index(date)
+        return unordered_date_list.index(date_input)
+
     except ValueError:
-        print("No collection on this day")
-        return False
+        date_obj = datetime.strptime(date_input, '%m/%d/%Y')
+        date_obj += timedelta(days=1)
+        return is_date_on_calendar(date_obj.strftime('%m/%d/%Y'))
 
 
 def print_results(indexs):
     for index in indexs:
-        print((bin_event_list[index][0].decode()), "on", unordered_date_list[index])
+        print("The next collection is: ", (bin_event_list[index][0].decode()), "on", unordered_date_list[index])
 
 
 def menu():
@@ -97,6 +100,7 @@ def run_program():
     indexs = find_all_occurrences_of_input_date(user_input, count)
     if indexs:
         print_results(indexs)
+
 
 def run_program_test():
     bin_data = get_bin_data()
