@@ -42,13 +42,16 @@ def count_the_mode_date_occurrences(date_list):
 
 
 def find_all_occurrences_of_input_date(date_input, count):
-    index = is_date_on_calendar(date_input)
+    index = is_date_on_calendar(date_input, 0)
     if date_input:
+        index_of_date_input_in_ordered_list = 0
         positions_of_date_input_in_unordered_list = []
         for sublist in ordered_date_list:
             if sublist[1] == index:
                 index_of_date_input_in_ordered_list = ordered_date_list.index(sublist)
                 break
+        if index_of_date_input_in_ordered_list == 0:
+            return
         positions_of_date_input_in_unordered_list.append(ordered_date_list[index_of_date_input_in_ordered_list][1])
         for i in range(1, count):
             if index_of_date_input_in_ordered_list + i < len(ordered_date_list):
@@ -67,14 +70,18 @@ def is_date_valid(date):
             print('Invalid date form!  Please use the format mm/dd/YYYY')
 
 
-def is_date_on_calendar(date_input):
+def is_date_on_calendar(date_input, recursion_count):
+    recursion_count += 1
+    if recursion_count > 30:
+        return print("There are no further schedules planned")
+
     try:
         return unordered_date_list.index(date_input)
 
     except ValueError:
         date_obj = datetime.strptime(date_input, '%m/%d/%Y')
         date_obj += timedelta(days=1)
-        return is_date_on_calendar(date_obj.strftime('%m/%d/%Y'))
+        return is_date_on_calendar(date_obj.strftime('%m/%d/%Y'), recursion_count)
 
 
 def print_results(indexs):
